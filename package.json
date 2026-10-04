@@ -1,0 +1,28 @@
+{
+  "name": "pi-footer-kit",
+  "version": "0.1.0",
+  "description": "Customize Pi's native footer components without changing its layout",
+  "type": "module",
+  "license": "MIT",
+  "keywords": ["pi-package", "pi-extension"],
+  "pi": {
+    "extensions": ["./src/index.ts"]
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/*.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "upstream:fetch": "node scripts/fetch-upstream-footer.mjs",
+    "upstream:check": "node scripts/check-upstream-footer.mjs"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}

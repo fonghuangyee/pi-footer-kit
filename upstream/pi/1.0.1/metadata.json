@@ -1,0 +1,19 @@
+{
+  "package": "@earendil-works/pi-coding-agent",
+  "version": "1.0.1",
+  "gitHead": "a7229ddc21810d6245105978033b7df645ecc2f7",
+  "tag": "v1.0.1",
+  "fetchedAt": "2026-08-17",
+  "files": {
+    "footer.ts": {
+      "sourcePath": "packages/coding-agent/src/modes/interactive/components/footer.ts",
+      "sourceUrl": "https://raw.githubusercontent.com/earendil-works/pi/a7229ddc21810d6245105978033b7df645ecc2f7/packages/coding-agent/src/modes/interactive/components/footer.ts",
+      "sha256": "494c5dca212af8d895e20810269fd9d46b3b4f8e12435c803ae93049d6eb4ad4"
+    },
+    "footer-data-provider.ts": {
+      "sourcePath": "packages/coding-agent/src/core/footer-data-provider.ts",
+      "sourceUrl": "https://raw.githubusercontent.com/earendil-works/pi/a7229ddc21810d6245105978033b7df645ecc2f7/packages/coding-agent/src/core/footer-data-provider.ts",
+      "sha256": "024ae5b3f50a15db9c149f644845ffb267df838b3a555a0756db95043e05a0e2"
+    }
+  }
+}

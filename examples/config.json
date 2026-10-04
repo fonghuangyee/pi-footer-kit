@@ -1,0 +1,45 @@
+{
+  "path": {
+    "visible": true,
+    "display": "basename",
+    "color": "dim"
+  },
+  "git": {
+    "visible": true,
+    "color": "success"
+  },
+  "tokens": {
+    "visible": true,
+    "display": "native",
+    "color": "muted"
+  },
+  "cost": {
+    "visible": true,
+    "color": "muted"
+  },
+  "context": {
+    "visible": true,
+    "display": "percentage",
+    "color": "warning"
+  },
+  "model": {
+    "visible": true,
+    "display": "native",
+    "color": "accent"
+  },
+  "provider": {
+    "visible": true,
+    "color": "dim"
+  },
+  "thinking": {
+    "visible": true,
+    "color": "auto"
+  },
+  "extensionStatus": {
+    "visible": true,
+    "color": "native",
+    "colors": {
+      "caffeinate": "accent"
+    }
+  }
+}
