@@ -1,9 +1,26 @@
 {
   "name": "pi-footer-kit",
   "version": "0.1.0",
-  "description": "Customize Pi's native footer components without changing its layout",
+  "description": "Customize Pi's native footer without changing its layout",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fonghuangyee/pi-footer-kit.git"
+  },
+  "homepage": "https://github.com/fonghuangyee/pi-footer-kit#readme",
+  "bugs": {
+    "url": "https://github.com/fonghuangyee/pi-footer-kit/issues"
+  },
+  "files": [
+    "src/",
+    "upstream/",
+    "scripts/",
+    "examples/",
+    "README.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
+  ],
   "keywords": ["pi-package", "pi-extension"],
   "pi": {
     "extensions": ["./src/index.ts"]
@@ -11,6 +28,8 @@
   "scripts": {
     "test": "node --experimental-strip-types --test test/*.test.mjs",
     "typecheck": "tsc --noEmit",
+    "check": "npm test && npm run typecheck",
+    "prepublishOnly": "npm run check",
     "upstream:fetch": "node scripts/fetch-upstream-footer.mjs",
     "upstream:check": "node scripts/check-upstream-footer.mjs"
   },
