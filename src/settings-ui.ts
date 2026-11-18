@@ -14,6 +14,7 @@ import {
   ALLOWED_DISPLAYS,
   COMPONENT_NAMES,
   THEME_COLORS,
+  TOKEN_ITEMS,
   writeConfigValue,
   type ComponentName,
   type FooterConfig,
@@ -129,6 +130,19 @@ function makeSettings(config: FooterConfig, theme: Theme, tui: TUI): SettingCont
       "Show or hide this footer component.",
       (value) => value === "shown",
     );
+
+    if (component === "tokens") {
+      for (const field of Object.keys(TOKEN_ITEMS) as (keyof typeof TOKEN_ITEMS)[]) {
+        addChoice(
+          ["tokens", field],
+          `${TOKEN_ITEMS[field]} · visibility`,
+          config.tokens[field] === false ? "hidden" : "shown",
+          ["shown", "hidden"],
+          "Show or hide this metric when Tokens · visibility is shown.",
+          (value) => value === "shown",
+        );
+      }
+    }
 
     const componentColors = component === "thinking" ? [...colors, "auto"] : colors;
     addChoice(

@@ -83,5 +83,41 @@ test("custom footer preserves native layout and can recolor third-party statuses
   const hiddenComponents = footer.render(80);
   assert.match(hiddenComponents[0], /session-name/);
   assert.doesNotMatch(hiddenComponents[0], /•/);
+  const metrics = {
+    input: "↑1.2k",
+    output: "↓980",
+    cacheRead: "R100",
+    cacheWrite: "W20",
+    cacheHitRate: "CH7.6%",
+  };
+  for (const [field, text] of Object.entries(metrics)) {
+    config.tokens[field] = false;
+    const stats = footer.render(160)[1];
+    assert.ok(!stats.includes(text), `${field} should be hidden`);
+    for (const [otherField, otherText] of Object.entries(metrics)) {
+      if (otherField !== field) assert.ok(stats.includes(otherText), `${otherField} should stay shown`);
+    }
+    assert.ok(stats.includes("73.0%"), "context stays shown independently");
+    config.tokens[field] = true;
+    assert.ok(footer.render(160)[1].includes(text), `${field} should show again`);
+  }
+
+  config.tokens.visible = false;
+  const hiddenTokens = footer.render(160)[1];
+  for (const text of Object.values(metrics)) assert.ok(!hiddenTokens.includes(text));
+  assert.ok(hiddenTokens.includes("73.0%"));
+
+  config.tokens.visible = true;
+  config.context.visible = false;
+  const hiddenContext = footer.render(160)[1];
+  assert.ok(!hiddenContext.includes("73.0%"));
+  for (const text of Object.values(metrics)) assert.ok(hiddenContext.includes(text));
+
+  for (const field of Object.keys(metrics)) config.tokens[field] = false;
+  assert.ok(!/↑|↓|R100|W20|CH|73\.0%/.test(footer.render(160)[1]));
+  assert.ok(footer.render(20).every((line) => visibleWidth(line) <= 20));
+
+  config.tokens = { visible: true };
+  for (const text of Object.values(metrics)) assert.ok(footer.render(160)[1].includes(text));
   footer.dispose();
 });

@@ -41,13 +41,14 @@ Supported component options:
 
 - Components: `path`, `git`, `sessionName`, `tokens`, `cost`, `context`, `model`, `provider`, `thinking`, and `extensionStatus`.
 - `visible`: `true` or `false` for every component.
+- `tokens.input`, `tokens.output`, `tokens.cacheRead`, `tokens.cacheWrite`, and `tokens.cacheHitRate`: independent visibility switches for ↑, ↓, R, W, and CH. All default to `true`; `tokens.visible: false` hides the entire group. Context usage (for example, `21.3%/256k`) uses `context.visible`.
 - `color`: `native` or any Pi theme color (`accent`, `success`, `warning`, `muted`, `dim`, and the full theme palette). `auto` is also available for `thinking`.
 - `path.display`: `native`, `full`, `basename`, or `segments`; `segments` accepts an integer from 1 to 50.
 - `context.display`: `native`, `percentage`, `used`, `used-total`, or `percentage-total`. `tokens.display` and `model.display` accept `native` only.
 - `extensionStatus.color`: fallback color for third-party statuses. `native` (the default) preserves the extension's own styling.
 - `extensionStatus.colors`: optional status-key overrides. For example, `"caffeinate": "accent"` colors Pi Caffeinated's `☕ caffeinated` status.
 
-Run `/footer-kit` (or `/footer-kit settings`) to open the interactive settings view. It always saves to your global user config; each change is saved immediately and previewed in the footer without reloading. You can also set a value directly, for example `/footer-kit set path.color warning` or `/footer-kit set path.display basename`; add `user` or `project` after `set` to choose the destination directly. Use `/footer-kit config` to inspect the merged config and all available values. Manual JSON edits still require Pi's native `/reload`.
+Run `/footer-kit` (or `/footer-kit settings`) to open the interactive settings view. Each token metric has its own visibility setting; use **Context usage · visibility** for the context indicator. It always saves to your global user config; each change is saved immediately and previewed in the footer without reloading. You can also set a value directly, for example `/footer-kit set path.color warning` or `/footer-kit set path.display basename`; add `user` or `project` after `set` to choose the destination directly. Use `/footer-kit config` to inspect the merged config and all available values. Manual JSON edits still require Pi's native `/reload`.
 
 ## Status items from other extensions
 

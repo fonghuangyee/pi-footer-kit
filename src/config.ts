@@ -76,6 +76,16 @@ export interface ComponentConfig {
   segments?: number;
 }
 
+export const TOKEN_ITEMS = {
+  input: "Input tokens (↑)",
+  output: "Output tokens (↓)",
+  cacheRead: "Cache read (R)",
+  cacheWrite: "Cache write (W)",
+  cacheHitRate: "Cache hit rate (CH)",
+} as const;
+
+export type TokenConfig = ComponentConfig & Partial<Record<keyof typeof TOKEN_ITEMS, boolean>>;
+
 export interface ExtensionStatusConfig extends ComponentConfig {
   colors?: Record<string, Exclude<FooterColor, "auto">>;
 }
@@ -84,7 +94,7 @@ export interface FooterConfig {
   path: ComponentConfig;
   git: ComponentConfig;
   sessionName: ComponentConfig;
-  tokens: ComponentConfig;
+  tokens: TokenConfig;
   cost: ComponentConfig;
   context: ComponentConfig;
   model: ComponentConfig;
@@ -97,7 +107,10 @@ export const DEFAULT_CONFIG: FooterConfig = {
   path: { visible: true, display: "native", color: "accent", segments: 2 },
   git: { visible: true, color: "success" },
   sessionName: { visible: true, color: "muted" },
-  tokens: { visible: true, display: "native", color: "warning" },
+  tokens: {
+    visible: true, display: "native", color: "warning",
+    input: true, output: true, cacheRead: true, cacheWrite: true, cacheHitRate: true,
+  },
   cost: { visible: true, color: "muted" },
   context: { visible: true, display: "native", color: "native" },
   model: { visible: true, display: "native", color: "accent" },
@@ -197,7 +210,14 @@ function parsePartialConfig(
       continue;
     }
 
-    const parsed: ComponentConfig & { colors?: Record<string, Exclude<FooterColor, "auto">> } = {};
+    const parsed: TokenConfig & { colors?: Record<string, Exclude<FooterColor, "auto">> } = {};
+    if (component === "tokens") {
+      for (const field of Object.keys(TOKEN_ITEMS) as (keyof typeof TOKEN_ITEMS)[]) {
+        if (!(field in value)) continue;
+        if (typeof value[field] === "boolean") parsed[field] = value[field];
+        else warnings.push(`${source}: tokens.${field} must be a boolean; using the default`);
+      }
+    }
     if ("visible" in value) {
       if (typeof value.visible === "boolean") parsed.visible = value.visible;
       else warnings.push(`${source}: ${component}.visible must be a boolean; using the default`);

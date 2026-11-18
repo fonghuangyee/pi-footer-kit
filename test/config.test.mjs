@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { DEFAULT_CONFIG, getConfigPaths, loadConfig, writeConfigValue } from "../src/config.ts";
+import { DEFAULT_CONFIG, TOKEN_ITEMS, getConfigPaths, loadConfig, writeConfigValue } from "../src/config.ts";
 
 async function withTempDir(run) {
   const directory = await mkdtemp(join(tmpdir(), "pi-footer-kit-"));
@@ -22,6 +22,36 @@ test("default config applies a semantic palette without requiring a file", () =>
   assert.equal(DEFAULT_CONFIG.context.color, "native");
   assert.equal(DEFAULT_CONFIG.model.color, "accent");
   assert.equal(DEFAULT_CONFIG.thinking.color, "auto");
+});
+
+test("token metric visibility defaults on and saves independently across scopes", async () => {
+  await withTempDir(async (root) => {
+    const env = { PI_CODING_AGENT_DIR: join(root, "agent") };
+    const options = { cwd: root, projectTrusted: true, env };
+    const initial = await loadConfig(options);
+    for (const field of Object.keys(TOKEN_ITEMS)) {
+      assert.equal(initial.config.tokens[field], true);
+      await writeConfigValue(initial.paths.user, ["tokens", field], false);
+    }
+    await writeConfigValue(initial.paths.project, ["tokens", "input"], true);
+    const loaded = await loadConfig(options);
+    assert.equal(loaded.config.tokens.input, true);
+    for (const field of Object.keys(TOKEN_ITEMS).filter((field) => field !== "input")) {
+      assert.equal(loaded.config.tokens[field], false);
+    }
+    assert.equal(loaded.config.tokens.visible, true);
+    assert.equal(loaded.config.context.visible, true);
+    assert.deepEqual(loaded.warnings, []);
+    const untrusted = await loadConfig({ ...options, projectTrusted: false });
+    assert.equal(untrusted.config.tokens.input, false);
+
+    for (const field of Object.keys(TOKEN_ITEMS)) {
+      await writeConfigValue(initial.paths.user, ["tokens", field], "false");
+    }
+    const invalid = await loadConfig({ ...options, projectTrusted: false });
+    assert.equal(invalid.warnings.length, Object.keys(TOKEN_ITEMS).length);
+    for (const field of Object.keys(TOKEN_ITEMS)) assert.equal(invalid.config.tokens[field], true);
+  });
 });
 
 test("config paths follow Pi agent dir and project conventions", () => {

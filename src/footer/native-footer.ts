@@ -229,11 +229,11 @@ export class NativeFooter implements Component {
     const { totals, latestCacheHitRate } = this.getSessionStats();
     const usageParts: string[] = [];
     if (isVisible(config, "tokens")) {
-      if (totals.input) usageParts.push(this.styleComponent("tokens", `↑${formatTokens(totals.input)}`));
-      if (totals.output) usageParts.push(this.styleComponent("tokens", `↓${formatTokens(totals.output)}`));
-      if (totals.cacheRead) usageParts.push(this.styleComponent("tokens", `R${formatTokens(totals.cacheRead)}`));
-      if (totals.cacheWrite) usageParts.push(this.styleComponent("tokens", `W${formatTokens(totals.cacheWrite)}`));
-      if ((totals.cacheRead > 0 || totals.cacheWrite > 0) && latestCacheHitRate !== undefined) {
+      if (config.tokens.input !== false && totals.input) usageParts.push(this.styleComponent("tokens", `↑${formatTokens(totals.input)}`));
+      if (config.tokens.output !== false && totals.output) usageParts.push(this.styleComponent("tokens", `↓${formatTokens(totals.output)}`));
+      if (config.tokens.cacheRead !== false && totals.cacheRead) usageParts.push(this.styleComponent("tokens", `R${formatTokens(totals.cacheRead)}`));
+      if (config.tokens.cacheWrite !== false && totals.cacheWrite) usageParts.push(this.styleComponent("tokens", `W${formatTokens(totals.cacheWrite)}`));
+      if (config.tokens.cacheHitRate !== false && (totals.cacheRead > 0 || totals.cacheWrite > 0) && latestCacheHitRate !== undefined) {
         usageParts.push(this.styleComponent("tokens", `CH${latestCacheHitRate.toFixed(1)}%`));
       }
     }

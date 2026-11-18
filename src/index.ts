@@ -4,6 +4,7 @@ import {
   COMPONENT_NAMES,
   loadConfig,
   THEME_COLORS,
+  TOKEN_ITEMS,
   writeConfigValue,
   type ComponentName,
   type FooterConfig,
@@ -90,7 +91,7 @@ function parseSetValue(setting: string, rawValue: string): { keyPath: string[]; 
 
   if (pieces.length !== 2) return { error: "Use a component setting such as path.color or context.display." };
   const field = pieces[1]!;
-  if (field === "visible") {
+  if (field === "visible" || (component === "tokens" && Object.hasOwn(TOKEN_ITEMS, field))) {
     if (["true", "shown"].includes(rawValue)) return { keyPath: [component, field], value: true };
     if (["false", "hidden"].includes(rawValue)) return { keyPath: [component, field], value: false };
     return { error: "Visibility must be true/shown or false/hidden." };
@@ -128,6 +129,7 @@ function configHelp(current: LoadedConfig): string {
     `Components: ${COMPONENT_NAMES.join(", ")}`,
     `Colors: native, ${THEME_COLORS.join(", ")}; thinking.color also accepts auto.`,
     "Visibility: true/false (or shown/hidden).",
+    `Token metric visibility: ${Object.keys(TOKEN_ITEMS).map((field) => `tokens.${field}`).join(", ")}; all shown by default.`,
     `path.display: ${ALLOWED_DISPLAYS.path?.join(", ")}; path.segments: integer 1-50.`,
     `context.display: ${ALLOWED_DISPLAYS.context?.join(", ")}.`,
     `tokens.display / model.display: native only.`,
