@@ -8,7 +8,7 @@ Pi may change native footer layout, formatting, or status behavior between relea
 npm run upstream:check
 ```
 
-The check resolves the latest published `@earendil-works/pi-coding-agent` version and its npm `gitHead`, fetches the footer and footer-data provider from that immutable commit, and compares them with the version selected in `upstream/pi/baseline.json`. It exits with status 1 when source differs, making it suitable for CI. It does not change repository files.
+The check resolves the latest published `@earendil-works/pi-coding-agent` version and its npm `gitHead` (or resolves GitHub's `v<version>` tag to a commit when npm omits `gitHead`), fetches the footer and footer-data provider from that immutable commit, and compares them with the version selected in `upstream/pi/baseline.json`. It exits with status 1 when source differs, making it suitable for CI. It does not change repository files.
 
 To compare a particular published version:
 
@@ -33,7 +33,7 @@ Review the diff between the current baseline and fetched sources. Then:
 3. Update the synchronization marker in `src/index.ts` and `README.md`.
 4. Change `upstream/pi/baseline.json` to the reviewed version and commit both the snapshot and the baseline-pointer change.
 
-The check needs network access; rendering and tests do not. Do not fetch upstream sources as part of package installation or normal footer rendering.
+The check needs network access; the GitHub tag fallback is subject to GitHub API rate limits and fails if the release tag is unavailable. Rendering and tests do not need network access. Do not fetch upstream sources as part of package installation or normal footer rendering.
 
 ## Attribution
 

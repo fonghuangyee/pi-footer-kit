@@ -24,16 +24,23 @@ export async function resolveRelease(version) {
   const suffix = version ? `/${encodeURIComponent(version)}` : "/latest";
   const registryUrl = `https://registry.npmjs.org/@earendil-works%2Fpi-coding-agent${suffix}`;
   const metadata = JSON.parse(await fetchText(registryUrl));
-  if (!metadata.version || !metadata.gitHead) {
-    throw new Error(`npm metadata for ${version ?? "latest"} is missing version or gitHead`);
+  if (typeof metadata.version !== "string" || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(metadata.version)) {
+    throw new Error(`npm metadata for ${version ?? "latest"} has a missing or invalid version`);
   }
-  if (!/^[0-9a-f]{40}$/i.test(metadata.gitHead)) {
-    throw new Error(`Unexpected Pi gitHead for ${metadata.version}: ${metadata.gitHead}`);
+  let commit = metadata.gitHead;
+  if (commit === undefined || commit === null) {
+    // Newer npm releases omit gitHead; resolve the release tag to an immutable commit.
+    const tagUrl = `https://api.github.com/repos/earendil-works/pi/commits/v${encodeURIComponent(metadata.version)}`;
+    const tag = JSON.parse(await fetchText(tagUrl));
+    commit = tag.sha;
+  }
+  if (typeof commit !== "string" || !/^[0-9a-f]{40}$/i.test(commit)) {
+    throw new Error(`Unexpected Pi commit for ${metadata.version}: ${commit}`);
   }
   return {
     name: metadata.name,
     version: metadata.version,
-    commit: metadata.gitHead,
+    commit,
     registryUrl,
   };
 }
