@@ -10,6 +10,14 @@ The initial renderer is based on Pi `1.0.1` (the footer source is identical to P
 pi install npm:pi-footer-kit
 ```
 
+Update an existing npm installation:
+
+```sh
+pi update npm:pi-footer-kit
+```
+
+Use `pi update --extensions` to update all installed packages. Install without a version pin to receive updates; after updating, run `/reload` in an open Pi session.
+
 Or load the extension locally during development:
 
 ```sh
